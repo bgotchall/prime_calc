@@ -20,14 +20,13 @@ var sample_answers = [];
 var operators = ["+", "-", "*", "/", "^"];
 
 $("#submit_button").on("click", function() {
-//go button clicked.  take all the inputs and build up the answer list.
+  //go button clicked.  take all the inputs and build up the answer list.
   var val1 = $("#n1").val();
   var val2 = $("#n2").val();
   var val3 = $("#n3").val();
   var target = $("#target").val();
   // $("#answers")
   sample_answers = [];
-  
 
   console.log(val1);
   console.log(val2);
@@ -36,14 +35,21 @@ $("#submit_button").on("click", function() {
 
   if (parseInt(val1) < 21 && parseInt(val2) < 21 && parseInt(val3) < 21) {
     console.log("is valid");
-    build_answers(val1,val2);
-    build_answers(factorial(val1),val2);
-    build_answers(val1,factorial(val2));
-    build_answers(factorial(val1),factorial(val2));
-    //print_answers();
-    build_answers(val2,val3);
-    //print_answers();
-    build_answers(val1,val3);
+    build_answers(val1, val2, false, false);
+    build_answers(val1, val2, true, false);
+    build_answers(val1, val2, false, true);
+    build_answers(val1, val2, true, true);
+
+    build_answers(val2, val1, false, false);
+    build_answers(val2, val1, true, false);
+    build_answers(val2, val1, false, true);
+    build_answers(val2, val1, true, true);
+
+    build_answers(val1, val3, false, false);
+    build_answers(val1, val3, true, false);
+    build_answers(val1, val3, false, true);
+    build_answers(val1, val3, false, false);
+
     //print_answers();
   } else {
     //if valid inputs
@@ -58,81 +64,113 @@ $("#submit_button").on("click", function() {
 
 //first attempt to do the all 3 approach:
 //function build_answers(a, b, c) {}
-function build_answers(a, b) {
+function build_answers(a, b, a_f, b_f) {
   //attempt a 2 argument answer since it is simpler, and I think I need it anyway
-var args=[a,b];
-//var my_results=[];
+  //a_f and b_f are booleans for whether to apply the unary factorial
 
-    for (var i=0;i<operators.length;i++){
-       var this_result=calc_result(a,b,operators[i]);
-       if (is_unique(this_result)===true){ 
-        sample_answers.push({sentence: a+operators[i]+b, result:this_result});
-        };
-        
-       // my_results.push({sentence: b+operators[i]+a, result:calc_result(b,a,operators[i])});
-       // console.log("sentence: "+b+operators[i]+a)
-      
+  var this_result;
+  //var my_results=[];
+  //if (a_f){a=factorial(a)}
+  //if (b_f){b=factorial(b)}
 
+  for (var i = 0; i < operators.length; i++) {
+    if (a_f && b_f) {
+      this_result = calc_result(factorial(a), factorial(b), operators[i]);
+      if (is_unique(this_result) === true) {
+        sample_answers.push({
+          sentence: a + "!" + operators[i] + b + "!",
+          result: this_result
+        });
+      }
+    } else if (a_f) {
+      this_result = calc_result(factorial(a), b, operators[i]);
+      if (is_unique(this_result) === true) {
+        sample_answers.push({
+          sentence: a + "!" + operators[i] + b,
+          result: this_result
+        });
+      }
+    } else if (b_f) {
+      this_result = calc_result(a, factorial(b), operators[i]);
+      if (is_unique(this_result) === true) {
+        sample_answers.push({
+          sentence: a + operators[i] + b + "!",
+          result: this_result
+        });
+      }
+    } else {
+      this_result = calc_result(a, b, operators[i]);
+      if (is_unique(this_result) === true) {
+        sample_answers.push({
+          sentence: a + operators[i] + b,
+          result: this_result
+        });
+      }
     }
 
+    // my_results.push({sentence: b+operators[i]+a, result:calc_result(b,a,operators[i])});
+    // console.log("sentence: "+b+operators[i]+a)
+  }
 }
 
-function print_answers(){
-    var element;
-    for (var i=0; i< sample_answers.length;i++){
-        element=sample_answers[i];
-        var thing1=$("<p> sentence: "+element.sentence+ " answer: "+ element.result +"</p>");
-        $("#answers").append(thing1);
-
+function print_answers() {
+  var element;
+  for (var i = 0; i < sample_answers.length; i++) {
+    element = sample_answers[i];
+    var thing1 = $(
+      "<p> sentence: " +
+        element.sentence +
+        " answer: " +
+        element.result +
+        "</p>"
+    );
+    $("#answers").append(thing1);
+  }
+}
+function is_unique(result) {
+  //if the actual numeric answer doesn't yet exist in the global array,add it.  no point in finding multiple
+  //ways to the same answer
+  var unique = true;
+  console.log(
+    "--------- starting unique test------------------looking at: " + result
+  );
+  for (i = 0; i < sample_answers.length - 1; i++) {
+    console.log(
+      "in unique test. " + result + " vs " + sample_answers[i].result
+    );
+    if (parseInt(sample_answers[i].result) === parseInt(result)) {
+      console.log("matches");
+      unique = false;
     }
-    
-}
-function is_unique(result){
-//if the actual numeric answer doesn't yet exist in the global array,add it.  no point in finding multiple
-//ways to the same answer
-var unique=true;
-
-    for (i=0; i<sample_answers.length;i++){
-        console.log("in unique test. "+result+ " vs "+sample_answers[i].result)
-        if (parseInt(sample_answers[i].result)===parseInt(result)){
-            console.log("matches");
-            unique=false;
-        }
-
-    }
-console.log("result was"+unique);
-return unique;
+  }
+  console.log("result was: " + unique);
+  return unique;
 }
 
-
-function calc_result(a,b,operator){
-//a and b are numbers, operator is a character. return the math answer
-switch (operator) {
+function calc_result(a, b, operator) {
+  //a and b are numbers, operator is a character. return the math answer
+  switch (operator) {
     case "+":
-        //console.log("plus detected");
-        return parseInt(a) + parseInt(b);
-        break;
+      //console.log("plus detected");
+      return parseInt(a) + parseInt(b);
+      break;
     case "-":
-        return parseInt(a) - parseInt(b);
-        break;
+      return parseInt(a) - parseInt(b);
+      break;
     case "*":
-        return parseInt(a) * parseInt(b);
-        break;
+      return parseInt(a) * parseInt(b);
+      break;
     case "/":
-        return parseInt(a) / parseInt(b);
-        break;
+      return parseInt(a) / parseInt(b);
+      break;
     case "^":
-        return parseInt(a) ** parseInt(b);
-        break;
+      return parseInt(a) ** parseInt(b);
+      break;
     default:
-        break;
-}
-
+      break;
+  }
 }
 
 function factorial(n) {
-    return (n != 1) ? n * factorial(n - 1) : 1;
-  }
-//print_answers(sample_answers);
-//sample_answers=build_answers(val1,val2);
-//print_answers(sample_answers);
+  return n != 1 ? n * factorial(n - 1) : 1;
+}

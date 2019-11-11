@@ -19,11 +19,14 @@ var sample_answers = [];
 var first_array = []; // this is for the first 2 results, in paraenthesis.
 var just_first_results = []; //an array of just the numeric results of the first operation, for fast checking
 var just_results = []; //an array of just the results, for fast checking.
+var sorted_answers = [];
+var work_array=[];
 
 var val1 = $("#n1").val();
 var val2 = $("#n2").val();
 var val3 = $("#n3").val();
 var target = $("#target").val();
+var primes=[1,2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113];
 
 var operators = ["+", "-", "*", "/", "^"];
 
@@ -39,6 +42,7 @@ $("#submit_button").on("click", function() {
   first_array = []; // this is for the first 2 results, in paraenthesis.
   just_first_results = []; //an array of just the numeric results of the first operation, for fast checking
   just_results = [];
+  
 
   console.log(val1);
   console.log(val2);
@@ -87,20 +91,58 @@ $("#submit_button").on("click", function() {
       build_answers_pass2(first_array[i], val2, false, "b");
       build_answers_pass2(first_array[i], val2, true, "b");
     }
+      //answers are totally built now in the answer array.  do cool stuff like sorting, showing
+      // your target, highlighting primes and charting on the gameboard.
+      // after all that identify the Goldbachs
+
+      if (true) {
+        console.log("==========final arrays=======================");
+        console.log("answer objects list");
+        console.log(sample_answers);
+        console.log("first pass objects");
+        console.log(first_array);
+        console.log("Just results number array");
+        console.log(just_results);
+      }
+     
+      
+      sorted_answers=[];
+      sort_answers(sample_answers, sorted_answers, 600);
+      print_answers(sorted_answers);
+      
+      sample_answers=sorted_answers;    //restore the answers array just in case
+      
+      if (just_results.includes(parseInt(target))) {
+        console.log ("target found!");
+
+        // function checkAdult(age) {
+        //     return age >= 18;
+        //   }
+          
+        //   function myFunction() {
+        //     document.getElementById("demo").innerHTML = ages.find(checkAdult);
+        //   }
+
+        var target_object;
+        //debugger;
+        target_object=find_by_result(sorted_answers,target);
+
+
+        var thing1 = $(
+            "<p> Target Found!  sentence: " +
+            target_object.sentence +
+              " answer: " +
+              target_object.result +
+              "</p>"
+          );
+        $("#answers").prepend(thing1);
+      }
+    
   } else {
     //if valid inputs
     var message = $("<p>Error.  numbers must be less than 20</p>");
     $("#answers").append(message);
   }
-
-  if (false) {
-    console.log("==========final arrays=======================");
-    console.log("answer objects list");
-    console.log(sample_answers);
-    console.log("first pass objects");
-    console.log(first_array);
-  }
-  print_answers();
 });
 
 //////////////////////////////////////////////////////
@@ -165,7 +207,16 @@ function build_answers_pass1(a, b, a_f, b_f, letter1, letter2) {
     console.log(just_first_results);
   }
 }
+//////////////////////////////////////////////////////
+function find_by_result(array,target){
+//search my array of objects, returning the object who's result matches "target"
 
+for (var i=0; i<array.length;i++){
+    if (array[i].result==target){ return array[i]}
+
+}
+
+}
 //////////////////////////////////////////////////////
 function build_answers_pass2(x, c, c_f, letter1) {
   //a_f and b_f are booleans for whether to apply the unary factorial
@@ -213,17 +264,31 @@ function build_answers_pass2(x, c, c_f, letter1) {
   }
 }
 
-function print_answers() {
+function print_answers(array_to_print) {
   var element;
-  for (var i = 0; i < sample_answers.length; i++) {
-    element = sample_answers[i];
+  var isPrime=false;
+  var primeFlair="";
+  //debugger;
+  for (var i = 0; i < array_to_print.length; i++) {
+    primeFlair="";
+    isPrime=false;
+    element = array_to_print[i];
+    if (primes.includes(element.result)){
+        isPrime=true;
+        primeFlair="  -  -  -  -  Prime number";
+    }
     var thing1 = $(
       "<p> sentence: " +
         element.sentence +
         " answer: " +
-        element.result +
+        element.result + primeFlair+
         "</p>"
     );
+    if (isPrime){
+        console.log("this is a prime"+ element.result);
+        //font-weight: bold;
+        $(thing1).css( "font-weight", "bold");
+    }
     $("#answers").append(thing1);
   }
 }
@@ -310,6 +375,52 @@ function good_answer(n) {
     return true;
   }
 }
+
+function sort_answers(in_array, out_array, index) {
+  //sort the full answer array (array of results) by the result, in ascending order
+  // a result looks like:  {sentence: "(3/2)*4", result: 6, used1: "c", used2: "Y"}
+
+  var lowest_result;
+  var this_result;
+  var position = 0;
+
+  index--; //just to keep it from running forever
+  if (index === 0) {
+    alert("infinate loop averted");
+    return;
+  }
+  //debugger;
+  
+  if (in_array.length === 0) {
+    //console.log("empty array detected");
+    return in_array, out_array; //exit condition for recursion.
+  } else {
+    lowest_result = in_array[0].result;
+
+    for (var i = 0; i < in_array.length; i++) {
+      //console.log("in sort algo.  current lowest is " + lowest_result);
+      this_result = in_array[i].result;
+
+      if (this_result < lowest_result) {
+       // console.log("lower result found: " + this_result);
+        lowest_result = this_result;
+        position = i;
+      }
+    }
+    // console.log("here is the object I am adding to out array: ");
+    // console.log( in_array[position]);
+    out_array.push(in_array[position]); //add the highest to the output array
+    in_array.splice(position, 1); //cut out the lowest result
+   
+    // console.log("Running again with this as the input: ");
+    // console.log( in_array);
+    // console.log("This is the output array so far: ");
+    // console.log( out_array);
+    return sort_answers(in_array, out_array, index); //recurse with a smaller in_array
+  }
+}
+
+
 
 //pseudo code:
 //

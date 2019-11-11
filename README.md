@@ -10,4 +10,4 @@ valid solutions will color green on the game board, and if you have entered a ta
 solution (if available) will be highlighted at the top of the list below the board.  On the board,
 prime numbers are more valuable, and are show with rounded corners.
 
-
+You can then click on the game board to show individual calculations for that position.

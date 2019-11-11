@@ -20,10 +20,10 @@ var first_array = []; // this is for the first 2 results, in paraenthesis.
 var just_first_results = []; //an array of just the numeric results of the first operation, for fast checking
 var just_results = []; //an array of just the results, for fast checking.
 
-  var val1 = $("#n1").val();
-  var val2 = $("#n2").val();
-  var val3 = $("#n3").val();
-  var target = $("#target").val();
+var val1 = $("#n1").val();
+var val2 = $("#n2").val();
+var val3 = $("#n3").val();
+var target = $("#target").val();
 
 var operators = ["+", "-", "*", "/", "^"];
 
@@ -34,7 +34,11 @@ $("#submit_button").on("click", function() {
   val3 = $("#n3").val();
   target = $("#target").val();
   // $("#answers")
+
   sample_answers = [];
+  first_array = []; // this is for the first 2 results, in paraenthesis.
+  just_first_results = []; //an array of just the numeric results of the first operation, for fast checking
+  just_results = [];
 
   console.log(val1);
   console.log(val2);
@@ -78,71 +82,27 @@ $("#submit_button").on("click", function() {
       //combine each partial answer with a 3rd dice.
       build_answers_pass2(first_array[i], val3, false, "c");
       build_answers_pass2(first_array[i], val3, true, "c");
+      build_answers_pass2(first_array[i], val1, false, "a");
+      build_answers_pass2(first_array[i], val1, true, "a");
+      build_answers_pass2(first_array[i], val2, false, "b");
+      build_answers_pass2(first_array[i], val2, true, "b");
     }
-
-    
   } else {
     //if valid inputs
     var message = $("<p>Error.  numbers must be less than 20</p>");
     $("#answers").append(message);
   }
 
- // sentence: (3/4)+5 answer: 5
-  console.log("==========final arrays=======================");
-  console.log("answer objects list");
-  console.log(sample_answers);
-  console.log("first pass objects");
-  console.log(first_array);
+  if (false) {
+    console.log("==========final arrays=======================");
+    console.log("answer objects list");
+    console.log(sample_answers);
+    console.log("first pass objects");
+    console.log(first_array);
+  }
   print_answers();
 });
 
-/////////////////////////////////////////////////////////////
-function build_answers(a, a_sentance, b, a_f, b_f) {
-  //attempt a 2 argument answer since it is simpler, and I think I need it anyway
-  //a_f and b_f are booleans for whether to apply the unary factorial
-
-  var this_result;
-
-  for (var i = 0; i < operators.length; i++) {
-    if (a_f && b_f) {
-      this_result = calc_result(factorial(a), factorial(b), operators[i]);
-      if (is_unique(this_result) === true) {
-        just_first_results.push(this_result);
-        sample_answers.push({
-          sentence: "(" + a_sentance + ")" + "!" + operators[i] + b + "!",
-          result: this_result
-        });
-      }
-    } else if (a_f) {
-      this_result = calc_result(factorial(a), b, operators[i]);
-      if (is_unique(this_result) === true) {
-        just_first_results.push(this_result);
-        sample_answers.push({
-          sentence: "(" + a_sentance + ")" + "!" + operators[i] + b,
-          result: this_result
-        });
-      }
-    } else if (b_f) {
-      this_result = calc_result(a, factorial(b), operators[i]);
-      if (is_unique(this_result) === true) {
-        just_first_results.push(this_result);
-        sample_answers.push({
-          sentence: "(" + a_sentance + ")" + operators[i] + b + "!",
-          result: this_result
-        });
-      }
-    } else {
-      this_result = calc_result(a, b, operators[i]);
-      if (is_unique(this_result) === true) {
-        just_first_results.push(this_result);
-        sample_answers.push({
-          sentence: "(" + a_sentance + ")" + operators[i] + b,
-          result: this_result
-        });
-      }
-    }
-  }
-}
 //////////////////////////////////////////////////////
 function build_answers_pass1(a, b, a_f, b_f, letter1, letter2) {
   //attempt a 2 argument answer since it is simpler, and I think I need it anyway
@@ -199,9 +159,11 @@ function build_answers_pass1(a, b, a_f, b_f, letter1, letter2) {
       }
     }
   }
-  console.log("pass1 results:");
-  console.log(first_array);
-  console.log(just_first_results);
+  if (false) {
+    console.log("pass1 results:");
+    console.log(first_array);
+    console.log(just_first_results);
+  }
 }
 
 //////////////////////////////////////////////////////
@@ -210,16 +172,8 @@ function build_answers_pass2(x, c, c_f, letter1) {
   //letter1 and letter2 are "a","b"or "c"
 
   var this_result;
-  console.log(
-    "x used are " +
-      x.used1 +
-      " " +
-      x.used2 +
-      "  thing I am checking against: " +
-      letter1
-  );
+
   if (x.used1 == letter1 || x.used2 == letter1) {
-    console.log("this letter is reused, exit");
     return; // if the third letter matches either of the first 2, done.
   } else {
     for (var i = 0; i < operators.length; i++) {
@@ -251,81 +205,13 @@ function build_answers_pass2(x, c, c_f, letter1) {
         }
       }
     }
-    console.log("pass2 results:");
-    console.log(first_array);
-    console.log(just_first_results);
-  }
-}
-
-//////////////////////////////////////////////////////
-function build_answers3(a, b, c, a_f, b_f, c_f) {
-  //a_f and b_f are booleans for whether to apply the unary factorial
-
-  var this_result = 0;
-
-  for (var i = 0; i < operators.length; i++) {
-    if (a_f && b_f) {
-      this_result = calc_result(factorial(a), factorial(b), operators[i]);
-      if (is_unique(this_result) === true) {
-        just_first_results.push(this_result);
-        first_array.push({
-          sentence: a + "!" + operators[i] + b + "!",
-          result: this_result
-        });
-      }
-    } else if (a_f) {
-      this_result = calc_result(factorial(a), b, operators[i]);
-      if (is_unique(this_result) === true) {
-        just_first_results.push(this_result);
-        first_array.push({
-          sentence: a + "!" + operators[i] + b,
-          result: this_result
-        });
-      }
-    } else if (b_f) {
-      this_result = calc_result(a, factorial(b), operators[i]);
-      if (is_unique(this_result) === true) {
-        just_first_results.push(this_result);
-        first_array.push({
-          sentence: a + operators[i] + b + "!",
-          result: this_result
-        });
-      }
-    } else {
-      this_result = calc_result(a, b, operators[i]);
-      if (is_unique(this_result) === true) {
-        just_first_results.push(this_result);
-        first_array.push({
-          sentence: a + operators[i] + b,
-          result: this_result
-        });
-      }
+    if (false) {
+      console.log("pass2 results:");
+      console.log(first_array);
+      console.log(just_first_results);
     }
   }
-
-  sample_answers = first_array;
-  console.log("first answers array is: ");
-  console.log(first_array);
-  console.log("first answers array item 0 is: ");
-  console.log(first_array[0]);
-  console.log("sample answers array is: ");
-  console.log(sample_answers);
-  console.log("just first results  is: ");
-  console.log(just_first_results);
-  for (i = 0; i < first_array.length; i++) {
-    //     //now march through the a%b answers, treating them as a parenthetical, and combine with c
-    build_answers(
-      first_array[i].result,
-      first_array[i].sentence,
-      c,
-      false,
-      false
-    );
-    // build_answers(first_array[i].result,first_array[i].sentence,c,false,true);
-    // build_answers(first_array[i].result,first_array[i].sentence,c,true,true);
-  }
 }
-/////////////////////////////////////////////
 
 function print_answers() {
   var element;
@@ -339,20 +225,6 @@ function print_answers() {
         "</p>"
     );
     $("#answers").append(thing1);
-  }
-}
-function is_unique_old(result) {
-  //if the actual numeric answer doesn't yet exist in the global array,add it.  no point in finding multiple
-  //ways to the same answer
-  var unique = true;
-  console.log(
-    "--------- starting unique test------------------looking at: " + result
-  );
-
-  //ok, now check for hugeness.  if this anwser, or sub answer is gigantic, pretend its useless even though there would be
-  // corner cases where it would be ok.
-  if (result > 499 || result < -499) {
-    return false;
   }
 }
 
@@ -433,7 +305,7 @@ function factorial(n) {
 function good_answer(n) {
   //this is the final filter for a numeric result.  it has to be an integer between 1 and 121.  otherwise return false
   //console.log("n is: " +n+" modulus is "+n%1);
-  if ((n%1==0)&&(n>0)&&(n<122)){
+  if (n % 1 == 0 && n > 0 && n < 122) {
     //if (Number.isInteger(n) &&(n>0)&&(n<122)){
     return true;
   }

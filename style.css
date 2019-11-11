@@ -1,0 +1,35 @@
+
+.game_row{
+    width: 450px;
+
+
+}
+
+#game_board{
+    width: 450px;
+
+}
+.board_square{
+    border: solid 1px black;
+    height: 40px;
+    width: 40px;
+    font-size: 10px;
+    text-align: center;
+    display: inline-block;
+    padding:0px;
+    padding-top:5px;
+
+}
+.prime{
+    font-weight: bold;
+    background-color: bisque;
+    border-radius: 10px;
+    
+}
+
+.potential_answer{
+
+    background-color: lightgreen;
+
+}
+

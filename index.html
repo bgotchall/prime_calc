@@ -28,14 +28,34 @@
 
 <body>
   <div class="container">
+
+      <div class="modal" id="exampleModal" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Solution sentence</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p id="modal_text">Modal body text goes here.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+               
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Button trigger modal
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Launch demo modal
+  </button> -->
+
     <h1>Prime Gold calculator</h1>
     <h4>Enter your 3 numbers and desired target</h4>
-    <!-- <input type="text" id="n1" />
-    <input type="text" id="n2" />
-    <input type="text" id="n3" /><br /><br />
-    Target: <input label="Target" type="text" id="target" />
-    <button id="submit_button">Submit</button>
-    <p id="answers"></p> -->
 
     <form>
       <div class="form-row">
@@ -61,6 +81,39 @@
         </div>
       </div>
     </form>
+    <!-- var primes = [1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113]; -->
+
+    <div class="row" id="game_board">
+        <div class="row game_row" >
+          <div class="col-1 board_square prime" value="101" id="101" data-toggle="modal" data-target="#exampleModal">101</div>
+          <div class="col-1 board_square" value="100" id="100" data-toggle="modal" data-target="#exampleModal">100</div>
+          <div class="col-1 board_square" value="99" id="99" data-toggle="modal" data-target="#exampleModal">99</div>
+          <div class="col-1 board_square" value="98" id="98" data-toggle="modal" data-target="#exampleModal">98</div>
+          <div class="col-1 board_square prime" value="101" id="101" data-toggle="modal" data-target="#exampleModal">97</div>
+          <div class="col-1 board_square" value="96" id="96" data-toggle="modal" data-target="#exampleModal">96</div>
+          <div class="col-1 board_square" value="95" id="95" data-toggle="modal" data-target="#exampleModal">95</div>
+          <div class="col-1 board_square" value="94" id="94" data-toggle="modal" data-target="#exampleModal">94</div>
+          <div class="col-1 board_square" value="93" id="93" data-toggle="modal" data-target="#exampleModal">93</div>
+          <div class="col-1 board_square" value="92" id="92" data-toggle="modal" data-target="#exampleModal">92</div>
+          <div class="col-1 board_square" value="91" id="91" data-toggle="modal" data-target="#exampleModal">91</div>
+          <div class="col "></div>
+        </div>
+        <div class="row game_row" >
+            <div class="col-1 board_square" value="102" id="102" data-toggle="modal" data-target="#exampleModal">102</div>
+            <div class="col-1 board_square" value="65" id="65" data-toggle="modal" data-target="#exampleModal">65</div>
+            <div class="col-1 board_square" value="64" id="64" data-toggle="modal" data-target="#exampleModal">64</div>
+            <div class="col-1 board_square" value="63" id="63" data-toggle="modal" data-target="#exampleModal">63</div>
+            <div class="col-1 board_square" value="62" id="62" data-toggle="modal" data-target="#exampleModal">62</div>
+            <div class="col-1 board_square prime" value="61" id="61" data-toggle="modal" data-target="#exampleModal">61</div>
+            <div class="col-1 board_square" value="60" id="60" data-toggle="modal" data-target="#exampleModal">60</div>
+            <div class="col-1 board_square prime" value="59" id="59" data-toggle="modal" data-target="#exampleModal">59</div>
+            <div class="col-1 board_square" value="58" id="58" data-toggle="modal" data-target="#exampleModal">58</div>
+            <div class="col-1 board_square" value="57" id="57" data-toggle="modal" data-target="#exampleModal">57</div>
+            <div class="col-1 board_square" value="90" id="90" data-toggle="modal" data-target="#exampleModal">90</div>
+          </div>
+    </div>
+    <br><br>
+
 
     <p id="answers"></p>
   </div>

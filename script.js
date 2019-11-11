@@ -30,8 +30,9 @@ var primes=[1,2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61
 
 var operators = ["+", "-", "*", "/", "^"];
 
-$("#submit_button").on("click", function() {
+$("#submit_button").on("click", function(event) {
   //go button clicked.  take all the inputs and build up the answer list.
+  event.preventDefault();
   val1 = $("#n1").val();
   val2 = $("#n2").val();
   val3 = $("#n3").val();
@@ -127,14 +128,18 @@ $("#submit_button").on("click", function() {
         //debugger;
         target_object=find_by_result(sorted_answers,target);
 
+// {/* <div class="alert alert-success" role="alert">
+//   A simple success alert—check it out!
+// </div> */}
 
         var thing1 = $(
-            "<p> Target Found!  sentence: " +
+            '<div class="alert alert-success" role="alert"> Target Found!  sentence: ' +
             target_object.sentence +
               " answer: " +
               target_object.result +
-              "</p>"
+              "</div>"
           );
+         // $(thing1).css( "border-style", "solid");
         $("#answers").prepend(thing1);
       }
     
@@ -275,7 +280,8 @@ function print_answers(array_to_print) {
     element = array_to_print[i];
     if (primes.includes(element.result)){
         isPrime=true;
-        primeFlair="  -  -  -  -  Prime number";
+        primeFlair=' <span class="badge badge-pill badge-success">Prime</span>';
+        //<span class="badge badge-pill badge-success">Success</span>
     }
     var thing1 = $(
       "<p> sentence: " +
